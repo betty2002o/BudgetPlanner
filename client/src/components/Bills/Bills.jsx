@@ -1,7 +1,7 @@
 import React from "react";
 import PageHeaderWithFilters from "../PageHeaderWithFilters/PageHeaderWithFilters";
 import TrackerTable from "../TrackerTable/TrackerTable";
-export default function Bill({ Type }) {
+export default function Bill({ type }) {
   const bills = [
     {
       id: 1,
@@ -50,8 +50,8 @@ export default function Bill({ Type }) {
   const columns = ["Date", "Description", "Amount", "Paid"];
   return (
     <div>
-      <PageHeaderWithFilters Type={Type} />
-      <TrackerTable columns={columns} data={bills} Type={Type} />
+      <PageHeaderWithFilters type={type} />
+      <TrackerTable columns={columns} data={bills} type={type} />
     </div>
   );
 }

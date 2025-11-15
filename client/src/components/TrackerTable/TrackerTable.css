@@ -44,12 +44,12 @@ td.add:hover {
   color: #fff;
 }
 
-.budget-summary {
+.pre-table-summary {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
 .pre-table-title > span {
@@ -68,7 +68,7 @@ td.add:hover {
   .pre-table-title > span:first-child {
     margin-bottom: 0;
   }
-  .budget-summary {
+  .pre-table-summary {
     flex-direction: row;
   }
 }

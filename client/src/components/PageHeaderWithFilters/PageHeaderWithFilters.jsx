@@ -1,7 +1,7 @@
 import React from "react";
 import "./PageHeaderWithFilters.css";
 
-export default function PageHeaderWithFilters({ Type }) {
+export default function PageHeaderWithFilters({ type }) {
   const currentYear = new Date().getFullYear();
   const startYear = currentYear - 5;
   const years = [];
@@ -35,16 +35,16 @@ export default function PageHeaderWithFilters({ Type }) {
     "Other",
   ];
   let categories = [];
-  if (Type === "Budget") {
+  if (type === "Budget") {
     categories = budgetCategory;
-  } else if (Type === "Daily Expense") {
+  } else if (type === "Daily Expense") {
     categories = expenseCategory;
   }
 
   return (
     <div className="header-wrapper">
       <div className="container d-flex">
-        <h1 className="header-title flex-grow">{Type}</h1>
+        <h1 className="header-title flex-grow">{type}</h1>
         <div className="header-filters  d-flex">
           <select name="year" id="year">
             <option value="">Filter by Year</option>
@@ -73,14 +73,14 @@ export default function PageHeaderWithFilters({ Type }) {
             </select>
           )}
 
-          {Type !== "Bills" && (
+          {type !== "Bills" && (
             <select name="" id="">
               <option value="">Filter by Amount </option>
               <option value="">Below 50 </option>
               <option value="">50 and above </option>
             </select>
           )}
-          {Type == "Bills" && (
+          {type == "Bills" && (
             <select name="" id="">
               <option value="">Filter by Paid </option>
               <option value="">Yes</option>

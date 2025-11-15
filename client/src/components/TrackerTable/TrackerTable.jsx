@@ -2,34 +2,67 @@ import React from "react";
 import "./TrackerTable.css";
 
 export default function TrackerTable({ columns, data, type }) {
-  console.log("ty", type);
   let totalIncome = 0;
   let totalSaving = 0;
   let totalAmount = 0;
-  if (type == "Budget") {
-    totalIncome = data
-      .filter((item) => item.category === "Income")
-      .reduce((sum, item) => sum + item.amount, 0);
-    totalSaving = data
-      .filter((item) => item.category === "Saving")
-      .reduce((sum, item) => sum + item.amount, 0);
-    totalAmount = totalIncome - totalSaving;
-  } else {
-    totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
+  let totalOwed = 0;
+
+  switch (type) {
+    case "Daily Expense":
+      totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
+      break;
+
+    case "Budget":
+      totalIncome = data
+        .filter((item) => item.category === "Income")
+        .reduce((sum, item) => sum + item.amount, 0);
+      totalSaving = data
+        .filter((item) => item.category === "Saving")
+        .reduce((sum, item) => sum + item.amount, 0);
+      totalAmount = totalIncome - totalSaving;
+      break;
+
+    case "Bills":
+      totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
+      totalOwed =
+        totalAmount -
+        data
+          .filter((item) => item.paid)
+          .reduce((sum, item) => sum + item.amount, 0);
+      break;
+
+    default:
+      break;
   }
   return (
     <div className="container">
       <div className="pre-table-title d-flex">
         <span className="flex-grow text-left">
-          {type == "Budget" ? (
-            <span className="budget-summary">
-              <div> Income: ${totalIncome.toFixed(2)}</div>
-              <div>Saving: ${totalSaving.toFixed(2)} </div>
-              <div> Budget: ${totalAmount.toFixed(2)}</div>
-            </span>
-          ) : (
-            <span>Total: ${totalAmount.toFixed(2)}</span>
-          )}
+          <div className="pre-table-summary">
+            {(() => {
+              switch (type) {
+                case "Daily Expense":
+                  return <div>Total: ${totalAmount.toFixed(2)}</div>;
+                case "Budget":
+                  return (
+                    <>
+                      <div>Income: ${totalIncome.toFixed(2)}</div>
+                      <div>Saving: ${totalSaving.toFixed(2)}</div>
+                      <div>Budget: ${totalAmount.toFixed(2)}</div>
+                    </>
+                  );
+                case "Bills":
+                  return (
+                    <>
+                      <div>Total: ${totalAmount.toFixed(2)}</div>
+                      <div>Owed: ${totalOwed.toFixed(2)}</div>
+                    </>
+                  );
+                default:
+                  return <div>1234</div>;
+              }
+            })()}
+          </div>
         </span>
         <span className="btn btn-sm  btn-outline ">Add</span>
       </div>

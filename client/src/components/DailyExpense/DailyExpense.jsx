@@ -1,7 +1,8 @@
 import React from "react";
 import PageHeaderWithFilters from "../PageHeaderWithFilters/PageHeaderWithFilters";
 import TrackerTable from "../TrackerTable/TrackerTable";
-export default function DailyExpense({ Type }) {
+export default function DailyExpense({ type }) {
+  console.log("1", type);
   const expenses = [
     {
       date: "2025-01-12",
@@ -26,8 +27,8 @@ export default function DailyExpense({ Type }) {
 
   return (
     <div>
-      <PageHeaderWithFilters Type={Type} />
-      <TrackerTable columns={columns} data={expenses} Type={Type} />
+      <PageHeaderWithFilters type={type} />
+      <TrackerTable columns={columns} data={expenses} type={type} />
     </div>
   );
 }

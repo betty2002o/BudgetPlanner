@@ -15,13 +15,13 @@ function App() {
           <Route path="/monthly-summary" element={<h1>Monthly Summary</h1>} />
           <Route
             path="/daily-expense"
-            element={<DailyExpense Type="Daily Expense" />}
+            element={<DailyExpense type="Daily Expense" />}
           />
           <Route
             path="/monthly-budget"
-            element={<MonthlyBudget Type="Budget" />}
+            element={<MonthlyBudget type="Budget" />}
           />
-          <Route path="/bills" element={<Bill Type="Bills" />} />
+          <Route path="/bills" element={<Bill type="Bills" />} />
         </Routes>
       </div>
     </BrowserRouter>

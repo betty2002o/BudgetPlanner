@@ -2,7 +2,7 @@ import React from "react";
 import PageHeaderWithFilters from "../PageHeaderWithFilters/PageHeaderWithFilters";
 import TrackerTable from "../TrackerTable/TrackerTable";
 
-export default function MonthlyBudget({ Type }) {
+export default function MonthlyBudget({ type }) {
   const monthlyBudget = [
     {
       date: "2025-11-01",
@@ -68,8 +68,8 @@ export default function MonthlyBudget({ Type }) {
   const columns = ["Date", "Description", "Category", "Amount"];
   return (
     <div>
-      <PageHeaderWithFilters Type={Type} />
-      <TrackerTable columns={columns} data={monthlyBudget} type={Type} />
+      <PageHeaderWithFilters type={type} />
+      <TrackerTable columns={columns} data={monthlyBudget} type={type} />
     </div>
   );
 }

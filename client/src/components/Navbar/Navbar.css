@@ -1,0 +1,21 @@
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #000;
+}
+.header-navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: var(--navbar-height);
+}
+.header-navbar > a {
+  color: #fff;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+.header-navbar > a:hover {
+  color: var(--link-color-hover);
+  text-decoration: underline;
+}

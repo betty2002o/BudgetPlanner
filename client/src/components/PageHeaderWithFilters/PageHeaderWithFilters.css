@@ -1,0 +1,18 @@
+.header-title {
+  color: var(--contrast-color);
+  font-size: 28px;
+  line-height: 1.7;
+}
+
+.header-filters {
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.header-filters select {
+  width: 200px;
+}
+
+@media (min-width: 768px) {
+}

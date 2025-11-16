@@ -5,7 +5,9 @@
   color: var(--link-color);
   border-radius: 6px 6px 0 0;
   background: linear-gradient(135deg, #213145, #364766);
+  gap: 5px;
 }
+
 .table-products {
   width: 100%;
   margin-bottom: 20px;
@@ -13,24 +15,24 @@
   table-layout: fixed;
   overflow-wrap: anywhere;
 }
-.table-products th:first-child,
-.table-products td:first-child {
+.tracker-products th:first-child,
+.tracker-products td:first-child {
   padding-left: 8px;
 }
 
-.table-products th:last-child,
-.table-products td:last-child {
+.tracker-products th:last-child,
+.ttracker-products td:last-child {
   width: 30px;
   text-align: center;
 }
-.table-products th {
+.tracker-products th {
   height: 30px;
   background-color: var(--muted-bg-color);
   color: #f6f3f7;
   border: 0;
   padding: 5px 0;
 }
-.table-products td {
+.tracker-products td {
   padding: 5px 0;
 }
 td.add {
@@ -52,16 +54,13 @@ td.add:hover {
   gap: 15px;
 }
 
-.pre-table-title > span {
-  margin-bottom: 5px;
-}
 @media (min-width: 768px) {
-  .table-products th:nth-child(2),
-  .table-products td:nth-child(2) {
+  .tracker-products th:nth-child(2),
+  .tracker-products td:nth-child(2) {
     width: 420px;
   }
-  .table-products th:first-child,
-  .table-products td:first-child {
+  .tracker-products th:first-child,
+  .tracker-products td:first-child {
     width: 150px;
   }
 

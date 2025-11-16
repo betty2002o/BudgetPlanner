@@ -1,0 +1,14 @@
+.overview-table {
+  margin-bottom: 10px;
+}
+.budget-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+}
+.budget-grid-item {
+  color: #fff;
+  padding: 8px;
+  text-align: center;
+  border-radius: 8px;
+}

@@ -1,0 +1,26 @@
+.overview-table {
+  width: 100%;
+}
+
+.overview-items {
+  padding: 8px;
+}
+.overview-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overview-item span {
+  flex: 1;
+  text-align: right;
+}
+.overview-item span:first-child {
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .overview-item span:first-child {
+  }
+}

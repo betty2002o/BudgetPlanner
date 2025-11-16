@@ -66,7 +66,7 @@ export default function TrackerTable({ columns, data, type }) {
         </span>
         <span className="btn btn-sm  btn-outline ">Add</span>
       </div>
-      <table className="table-products text-left">
+      <table className="table-products tracker-products text-left">
         <thead>
           <tr key={columns.id}>
             {columns.map((col) => (

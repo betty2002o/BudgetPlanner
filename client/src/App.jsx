@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import DailyExpense from "./components/DailyExpense/DailyExpense";
 import Bill from "./components/Bills/Bills";
+import Dashboard from "./components/Dashboard/Dashboard";
 import MonthlyBudget from "./components/MonthlyBudget/MonthlyBudget";
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
       <Navbar />
       <div className="body-wrapper">
         <Routes>
-          <Route path="/" element={<h1>Dashboard</h1>} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/monthly-summary" element={<h1>Monthly Summary</h1>} />
           <Route
             path="/daily-expense"

@@ -10,5 +10,9 @@
   color: #fff;
   padding: 8px;
   text-align: center;
-  border-radius: 8px;
+  /* border-radius: 8px; */
+}
+
+.budget-grid-item:nth-child(-n + 3) {
+  background-color: var(--muted-bg-color);
 }

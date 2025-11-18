@@ -4,6 +4,7 @@ import "./BudgetOverviewBar.css";
 
 export default function BudgetOverviewBar() {
   const bgColor = "var(--link-color-hover)";
+  // const bgColor = "var(--bg-green)";
   const baseBgColor = "var(--bg-blue)";
   // budget - expense / budget   remaining
 

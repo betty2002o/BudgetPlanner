@@ -1,0 +1,10 @@
+.graph-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.graph-size {
+  width: 300px;
+  height: 300px;
+  margin-top: 30px;
+}

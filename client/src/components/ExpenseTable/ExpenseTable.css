@@ -1,0 +1,26 @@
+.expense-products thead {
+  background-color: var(--muted-bg-color);
+  color: #fff;
+}
+.expense-products th {
+  color: #fff;
+  padding: 5px 0;
+}
+
+.expense-products td {
+  padding: 5px 0;
+}
+.expense-products th:first-child,
+.expense-products td:first-child {
+  padding-left: 8px;
+}
+
+.expense-products th:nth-child(2),
+.expense-products td:nth-child(2) {
+  text-align: center;
+}
+.expense-products th:last-child,
+.expense-products td:last-child {
+  padding-right: 8px;
+  text-align: right;
+}

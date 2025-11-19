@@ -73,13 +73,14 @@ export default function PageHeaderWithFilters({ type }) {
             </select>
           )}
 
-          {type !== "Bills" && (
-            <select name="" id="">
-              <option value="">Filter by Amount </option>
-              <option value="">Below 50 </option>
-              <option value="">50 and above </option>
-            </select>
-          )}
+          {type !== "Bills" ||
+            (type == "Monthly Summary" && (
+              <select name="" id="">
+                <option value="">Filter by Amount </option>
+                <option value="">Below 50 </option>
+                <option value="">50 and above </option>
+              </select>
+            ))}
           {type == "Bills" && (
             <select name="" id="">
               <option value="">Filter by Paid </option>

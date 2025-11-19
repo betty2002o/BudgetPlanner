@@ -2,6 +2,8 @@
   color: var(--contrast-color);
   font-size: 28px;
   line-height: 1.7;
+  text-align: left;
+  padding-left: 8px;
 }
 
 .header-filters {

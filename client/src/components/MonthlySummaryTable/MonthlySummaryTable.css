@@ -1,0 +1,30 @@
+.monthly-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 💻 Desktop = 6 items in one row */
+  grid-template-rows: repeat(3, auto);
+  text-align: center;
+}
+.monthly-summary-table-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.monthly-summary-table-item div {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+.monthly-summary-item-label {
+  background-color: var(--muted-bg-color);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .monthly-summary-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}

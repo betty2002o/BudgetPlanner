@@ -22,8 +22,12 @@
 
 .tracker-products th:last-child,
 .ttracker-products td:last-child {
-  width: 30px;
+  width: 60px;
   text-align: center;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
 }
 .tracker-products th {
   height: 30px;
@@ -35,14 +39,27 @@
 .tracker-products td {
   padding: 5px 0;
 }
-td.add {
+.edit {
   cursor: pointer;
   font-weight: 700;
   text-align: center;
   font-size: 140%;
+  padding: 0 5px;
 }
-td.add:hover {
+.edit:hover {
   background-color: var(--link-color-hover);
+  color: #fff;
+}
+
+.delete {
+  cursor: pointer;
+  font-weight: 700;
+  text-align: center;
+  font-size: 140%;
+  padding: 0 5px;
+}
+.delete:hover {
+  background-color: red;
   color: #fff;
 }
 

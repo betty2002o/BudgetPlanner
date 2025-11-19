@@ -1,7 +1,30 @@
-import React from "react";
+import { useState } from "react";
 import "./TrackerTable.css";
+import Modal from "../Modal/Modal";
 
 export default function TrackerTable({ columns, data, type }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState("");
+  const [modalData, setModalData] = useState(null);
+
+  const handleAdd = () => {
+    setModalMode("add");
+    setModalData(null);
+    setModalOpen(true);
+  };
+
+  const handleEdit = (row) => {
+    setModalMode("edit");
+    setModalData(row);
+    setModalOpen(true);
+  };
+
+  const handleDelete = (row) => {
+    setModalMode("delete");
+    setModalData(row);
+    setModalOpen(true);
+  };
+
   let totalIncome = 0;
   let totalSaving = 0;
   let totalAmount = 0;
@@ -64,7 +87,9 @@ export default function TrackerTable({ columns, data, type }) {
             })()}
           </div>
         </span>
-        <span className="btn btn-sm  btn-outline ">Add</span>
+        <span className="btn btn-sm  btn-outline " onClick={handleAdd}>
+          Add
+        </span>
       </div>
       <table className="table-products tracker-products text-left">
         <thead>
@@ -91,11 +116,30 @@ export default function TrackerTable({ columns, data, type }) {
 
                 return <td key={i}>{row[col.toLowerCase()] ?? ""}</td>;
               })}
-              <td className="add">+</td>
+              <td className="actions">
+                <div onClick={() => handleEdit(row)} className="edit">
+                  +
+                </div>
+                <div onClick={() => handleDelete(row)} className="delete">
+                  -
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {modalOpen && (
+        <Modal
+          mode={modalMode} // "add", "edit", "delete"
+          data={modalData} // row data for edit/delete
+          type={type} // table type if needed
+          onClose={() => setModalOpen(false)}
+          onSubmit={(updatedData) => {
+            console.log("Modal submitted:", updatedData);
+            setModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }

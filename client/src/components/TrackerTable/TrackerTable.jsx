@@ -1,8 +1,29 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { ExpenseContext } from "../../contexts/ExpenseContext";
+import { BillContext } from "../../contexts/BillContext";
+import { BudgetContext } from "../../contexts/BudgetContext";
 import "./TrackerTable.css";
 import Modal from "../Modal/Modal";
 
-export default function TrackerTable({ columns, data, type }) {
+export default function TrackerTable({ columns, type }) {
+  const { expenses } = useContext(ExpenseContext);
+  const { budgets } = useContext(BudgetContext);
+  const { bills } = useContext(BillContext);
+
+  const getDataByType = (type) => {
+    switch (type) {
+      case "Daily Expense":
+        return expenses;
+      case "Budget":
+        return budgets;
+      case "Bills":
+        return bills;
+      default:
+        return [];
+    }
+  };
+  const data = getDataByType(type);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [modalData, setModalData] = useState(null);
@@ -30,33 +51,50 @@ export default function TrackerTable({ columns, data, type }) {
   let totalAmount = 0;
   let totalOwed = 0;
 
-  switch (type) {
-    case "Daily Expense":
-      totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
-      break;
+  const totals = (() => {
+    let totalIncome = 0,
+      totalSaving = 0,
+      totalAmount = 0,
+      totalOwed = 0;
 
-    case "Budget":
+    if (type === "Daily Expense") {
+      totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
+    } else if (type === "Budget") {
       totalIncome = data
-        .filter((item) => item.category === "Income")
-        .reduce((sum, item) => sum + item.amount, 0);
+        .filter((i) => i.category === "Income")
+        .reduce((sum, i) => sum + i.amount, 0);
       totalSaving = data
-        .filter((item) => item.category === "Saving")
-        .reduce((sum, item) => sum + item.amount, 0);
+        .filter((i) => i.category === "Saving")
+        .reduce((sum, i) => sum + i.amount, 0);
       totalAmount = totalIncome - totalSaving;
-      break;
-
-    case "Bills":
-      totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
+    } else if (type === "Bills") {
+      totalAmount = data.reduce((sum, i) => sum + i.amount, 0);
       totalOwed =
         totalAmount -
-        data
-          .filter((item) => item.paid)
-          .reduce((sum, item) => sum + item.amount, 0);
-      break;
+        data.filter((i) => i.paid).reduce((sum, i) => sum + i.amount, 0);
+    }
 
-    default:
-      break;
-  }
+    return { totalIncome, totalSaving, totalAmount, totalOwed };
+  })();
+
+  const renderCell = (col, row, type) => {
+    if (col === "Paid" && type !== "Bills") return "";
+
+    switch (col) {
+      case "Paid":
+        return row.paid ? "Yes" : "No";
+      case "Amount":
+        return `$${row.amount.toFixed(2)}`;
+      case "Category":
+        return row.category ?? "";
+      case "Description":
+        return row.description;
+      case "Date":
+        return row.date;
+      default:
+        return row[col.toLowerCase()] ?? "";
+    }
+  };
   return (
     <div className="container">
       <div className="pre-table-title d-flex">
@@ -65,24 +103,24 @@ export default function TrackerTable({ columns, data, type }) {
             {(() => {
               switch (type) {
                 case "Daily Expense":
-                  return <div>Total: ${totalAmount.toFixed(2)}</div>;
+                  return <div>Total: ${totals.totalAmount.toFixed(2)}</div>;
                 case "Budget":
                   return (
                     <>
-                      <div>Income: ${totalIncome.toFixed(2)}</div>
-                      <div>Saving: ${totalSaving.toFixed(2)}</div>
-                      <div>Budget: ${totalAmount.toFixed(2)}</div>
+                      <div>Income: ${totals.totalIncome.toFixed(2)}</div>
+                      <div>Saving: ${totals.totalSaving.toFixed(2)}</div>
+                      <div>Budget: ${totals.totalAmount.toFixed(2)}</div>
                     </>
                   );
                 case "Bills":
                   return (
                     <>
-                      <div>Total: ${totalAmount.toFixed(2)}</div>
-                      <div>Owed: ${totalOwed.toFixed(2)}</div>
+                      <div>Total: ${totals.totalAmount.toFixed(2)}</div>
+                      <div>Owed: ${totals.totalOwed.toFixed(2)}</div>
                     </>
                   );
                 default:
-                  return <div>1234</div>;
+                  return <div></div>;
               }
             })()}
           </div>
@@ -103,19 +141,9 @@ export default function TrackerTable({ columns, data, type }) {
         <tbody>
           {data.map((row, idx) => (
             <tr key={idx}>
-              {columns.map((col, i) => {
-                if (col === "Paid")
-                  return <td key={i}>{row.paid ? "Yes" : "No"}</td>;
-                if (col === "Amount")
-                  return <td key={i}>${row.amount.toFixed(2)}</td>;
-                if (col === "Category")
-                  return <td key={i}>{row.category ?? ""}</td>;
-                if (col === "Description")
-                  return <td key={i}>{row.description}</td>;
-                if (col === "Date") return <td key={i}>{row.date}</td>;
-
-                return <td key={i}>{row[col.toLowerCase()] ?? ""}</td>;
-              })}
+              {columns.map((col, i) => (
+                <td key={i}>{renderCell(col, row, type)}</td>
+              ))}
               <td className="actions">
                 <div onClick={() => handleEdit(row)} className="edit">
                   +

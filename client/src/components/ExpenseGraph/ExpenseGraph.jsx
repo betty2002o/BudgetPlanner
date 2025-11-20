@@ -15,6 +15,7 @@ export default function ExpenseGraph() {
       "Transportation",
       "Entertainment",
       "Other",
+      "Paid Bills",
     ],
     datasets: [
       {

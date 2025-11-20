@@ -6,27 +6,30 @@ import Bill from "./components/Bills/Bills";
 import Dashboard from "./components/Dashboard/Dashboard";
 import MonthlyBudget from "./components/MonthlyBudget/MonthlyBudget";
 import MonthlySummary from "./components/MonthlySummary/MonthlySummary";
+import FinanceProvider from "./contexts/FinanceProvider";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <div className="body-wrapper">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/monthly-summary" element={<MonthlySummary />} />
-          <Route
-            path="/monthly-budget"
-            element={<MonthlyBudget type="Budget" />}
-          />
-          <Route path="/bills" element={<Bill type="Bills" />} />
-          <Route
-            path="/daily-expense"
-            element={<DailyExpense type="Daily Expense" />}
-          />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <FinanceProvider>
+      <BrowserRouter>
+        <Navbar />
+        <div className="body-wrapper">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/monthly-summary" element={<MonthlySummary />} />
+            <Route
+              path="/monthly-budget"
+              element={<MonthlyBudget type="Budget" />}
+            />
+            <Route path="/bills" element={<Bill type="Bills" />} />
+            <Route
+              path="/daily-expense"
+              element={<DailyExpense type="Daily Expense" />}
+            />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </FinanceProvider>
   );
 }
 

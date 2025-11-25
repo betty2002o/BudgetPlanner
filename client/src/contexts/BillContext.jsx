@@ -15,27 +15,27 @@ export function BillProvider({ children }) {
       .catch((err) => console.error(err));
   }, []);
 
-  // Add expense
-  //   const addExpense = async (newExpense) => {
-  //     const res = await axios.post("http://localhost:5000/api/expenses", newExpense);
-  //     setExpenses((prev) => [...prev, res.data]);
-  //   };
+  const addBill = async (newBill) => {
+    const res = await axios.post("http://localhost:5000/api/bills", newBill);
+    setBills((prev) => [...prev, res.data]);
+  };
 
-  //   // Update expense
-  //   const updateExpense = async (id, updatedData) => {
-  //     const res = await axios.put(`http://localhost:5000/api/expenses/${id}`, updatedData);
-  //     setExpenses((prev) => prev.map((item) =>
-  //       item._id === id ? res.data : item
-  //     ));
-  //   };
+  const updateBill = async (id, updatedData) => {
+    const res = await axios.put(
+      `http://localhost:5000/api/bills/${id}`,
+      updatedData
+    );
+    setBills((prev) => prev.map((item) => (item._id === id ? res.data : item)));
+  };
 
-  //   // Delete expense
-  //   const deleteExpense = async (id) => {
-  //     await axios.delete(`http://localhost:5000/api/expenses/${id}`);
-  //     setExpenses((prev) => prev.filter((item) => item._id !== id));
-  //   };
+  const deleteBill = async (id) => {
+    await axios.delete(`http://localhost:5000/api/bills/${id}`);
+    setBills((prev) => prev.filter((item) => item._id !== id));
+  };
 
   return (
-    <BillContext.Provider value={{ bills }}>{children}</BillContext.Provider>
+    <BillContext.Provider value={{ bills, addBill, updateBill, deleteBill }}>
+      {children}
+    </BillContext.Provider>
   );
 }

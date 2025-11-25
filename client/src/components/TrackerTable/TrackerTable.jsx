@@ -5,10 +5,12 @@ import { BudgetContext } from "../../contexts/BudgetContext";
 import "./TrackerTable.css";
 import Modal from "../Modal/Modal";
 
-export default function TrackerTable({ columns, type }) {
-  const { expenses } = useContext(ExpenseContext);
-  const { budgets } = useContext(BudgetContext);
-  const { bills } = useContext(BillContext);
+export default function TrackerTable({ columns, type, filters }) {
+  const { addExpense, updateExpense, deleteExpense, expenses } =
+    useContext(ExpenseContext);
+  const { addBudget, updateBudget, deleteBudget, budgets } =
+    useContext(BudgetContext);
+  const { addBill, updateBill, deleteBill, bills } = useContext(BillContext);
 
   const getDataByType = (type) => {
     switch (type) {
@@ -22,7 +24,40 @@ export default function TrackerTable({ columns, type }) {
         return [];
     }
   };
-  const data = getDataByType(type);
+  const allData = getDataByType(type);
+  const data = allData.filter((item) => {
+    if (!filters) return true;
+
+    if (filters.year && !item.date.startsWith(filters.year)) return false;
+
+    if (filters.month) {
+      const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      const monthIndex = new Date(item.date).getMonth();
+      if (monthNames[monthIndex] !== filters.month) return false;
+    }
+
+    if (filters.category && item.category !== filters.category) return false;
+
+    if (filters.paid) {
+      const isPaid = filters.paid.toLowerCase() === "yes";
+      if (item.paid !== isPaid) return false;
+    }
+
+    return true;
+  });
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("");
@@ -45,11 +80,6 @@ export default function TrackerTable({ columns, type }) {
     setModalData(row);
     setModalOpen(true);
   };
-
-  let totalIncome = 0;
-  let totalSaving = 0;
-  let totalAmount = 0;
-  let totalOwed = 0;
 
   const totals = (() => {
     let totalIncome = 0,
@@ -95,6 +125,48 @@ export default function TrackerTable({ columns, type }) {
         return row[col.toLowerCase()] ?? "";
     }
   };
+
+  function addItem(item) {
+    switch (item.type) {
+      case "Daily Expense":
+        addExpense(item);
+        break;
+      case "Budget":
+        addBudget(item);
+        break;
+      case "Bills":
+        addBill(item);
+        break;
+    }
+  }
+
+  function updateItem(item) {
+    switch (item.type) {
+      case "Daily Expense":
+        updateExpense(item._id, item);
+        break;
+      case "Budget":
+        updateBudget(item._id, item);
+        break;
+      case "Bills":
+        updateBill(item._id, item);
+        break;
+    }
+  }
+
+  function deleteItem(id) {
+    switch (type) {
+      case "Daily Expense":
+        deleteExpense(id);
+        break;
+      case "Budget":
+        deleteBudget(id);
+        break;
+      case "Bills":
+        deleteBill(id);
+        break;
+    }
+  }
   return (
     <div className="container">
       <div className="pre-table-title d-flex">
@@ -158,12 +230,15 @@ export default function TrackerTable({ columns, type }) {
       </table>
       {modalOpen && (
         <Modal
-          mode={modalMode} // "add", "edit", "delete"
-          data={modalData} // row data for edit/delete
-          type={type} // table type if needed
+          mode={modalMode}
+          data={modalData}
+          type={type}
           onClose={() => setModalOpen(false)}
-          onSubmit={(updatedData) => {
-            console.log("Modal submitted:", updatedData);
+          onSubmit={(formValues) => {
+            if (formValues.mode === "add") addItem(formValues);
+            else if (formValues.mode === "edit") updateItem(formValues);
+            else if (formValues.mode === "delete") deleteItem(formValues._id);
+
             setModalOpen(false);
           }}
         />

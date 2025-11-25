@@ -88,6 +88,7 @@ a {
 input[type="text"],
 input[type="search"],
 input[type="date"],
+input[type="number"],
 select,
 textarea {
   height: 34px;
@@ -105,6 +106,7 @@ textarea {
   outline: none;
   transition: box-shadow 0.2s;
 }
+
 .text-left {
   text-align: left;
 }

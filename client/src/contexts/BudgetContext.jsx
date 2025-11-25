@@ -16,27 +16,36 @@ export function BudgetProvider({ children }) {
   }, []);
 
   // Add expense
-  //   const addExpense = async (newExpense) => {
-  //     const res = await axios.post("http://localhost:5000/api/expenses", newExpense);
-  //     setExpenses((prev) => [...prev, res.data]);
-  //   };
+  const addBudget = async (newBudget) => {
+    const res = await axios.post(
+      "http://localhost:5000/api/budgets",
+      newBudget
+    );
+    setBudgets((prev) => [...prev, res.data]);
+  };
 
-  //   // Update expense
-  //   const updateExpense = async (id, updatedData) => {
-  //     const res = await axios.put(`http://localhost:5000/api/expenses/${id}`, updatedData);
-  //     setExpenses((prev) => prev.map((item) =>
-  //       item._id === id ? res.data : item
-  //     ));
-  //   };
+  // Update expense
+  const updateBudget = async (id, updatedData) => {
+    const res = await axios.put(
+      `http://localhost:5000/api/budgets/${id}`,
+      updatedData
+    );
+    setBudgets((prev) =>
+      prev.map((item) => (item._id === id ? res.data : item))
+    );
+  };
 
-  //   // Delete expense
-  //   const deleteExpense = async (id) => {
-  //     await axios.delete(`http://localhost:5000/api/expenses/${id}`);
-  //     setExpenses((prev) => prev.filter((item) => item._id !== id));
-  //   };
+  // Delete expense
+  const deleteBudget = async (id) => {
+    await axios.delete(`http://localhost:5000/api/budgets/${id}`);
+    setBudgets((prev) => prev.filter((item) => item._id !== id));
+  };
 
   return (
-    <BudgetContext.Provider value={{ budgets }}>
+    <BudgetContext.Provider
+      value={{ budgets, addBudget, updateBudget, deleteBudget }}
+    >
+      deleteBudget
       {children}
     </BudgetContext.Provider>
   );

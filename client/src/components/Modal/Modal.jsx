@@ -1,181 +1,141 @@
-// import React, { useState, useEffect } from "react";
-// import "./Modal.css"; // for styling the overlay and modal
-
-// export default function Modal({
-//   isOpen,
-//   mode,
-//   table,
-//   initialData = {},
-//   onClose,
-//   onSubmit,
-// }) {
-//   const [formData, setFormData] = useState({
-//     date: "",
-//     description: "",
-//     category: "",
-//     amount: "",
-//     paid: false,
-//   });
-
-//   // Pre-fill data in edit mode
-//   useEffect(() => {
-//     if (mode === "edit" && initialData) {
-//       setFormData({ ...formData, ...initialData });
-//     }
-//   }, [mode, initialData]);
-
-//   if (!isOpen) return null; // Don't render if modal is closed
-
-//   const handleChange = (e) => {
-//     const { name, value, type, checked } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: type === "checkbox" ? checked : value,
-//     });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     onSubmit(formData); // Pass form data back to parent
-//     onClose(); // Close modal
-//   };
-
-//   const renderFields = () => {
-//     switch (table) {
-//       case "expense":
-//       case "budget":
-//         return (
-//           <>
-//             <label>Date</label>
-//             <input
-//               type="date"
-//               name="date"
-//               value={formData.date}
-//               onChange={handleChange}
-//             />
-
-//             <label>Description</label>
-//             <input
-//               type="text"
-//               name="description"
-//               value={formData.description}
-//               onChange={handleChange}
-//             />
-
-//             <label>Category</label>
-//             <input
-//               type="text"
-//               name="category"
-//               value={formData.category}
-//               onChange={handleChange}
-//             />
-
-//             <label>Amount</label>
-//             <input
-//               type="number"
-//               name="amount"
-//               value={formData.amount}
-//               onChange={handleChange}
-//             />
-//           </>
-//         );
-//       case "bills":
-//         return (
-//           <>
-//             <label>Date</label>
-//             <input
-//               type="date"
-//               name="date"
-//               value={formData.date}
-//               onChange={handleChange}
-//             />
-
-//             <label>Description</label>
-//             <input
-//               type="text"
-//               name="description"
-//               value={formData.description}
-//               onChange={handleChange}
-//             />
-
-//             <label>Amount</label>
-//             <input
-//               type="number"
-//               name="amount"
-//               value={formData.amount}
-//               onChange={handleChange}
-//             />
-
-//             <label>Paid</label>
-//             <input
-//               type="checkbox"
-//               name="paid"
-//               checked={formData.paid}
-//               onChange={handleChange}
-//             />
-//           </>
-//         );
-//       default:
-//         return null;
-//     }
-//   };
-
-//   return (
-//     <div className="modal-overlay">
-//       <div className="modal">
-//         <h2>
-//           {mode === "add"
-//             ? `Add ${table}`
-//             : mode === "edit"
-//             ? `Edit ${table}`
-//             : `Delete ${table}`}
-//         </h2>
-//         {mode === "delete" ? (
-//           <>
-//             <p>Are you sure you want to delete this {table}?</p>
-//             <div className="modal-buttons">
-//               <button
-//                 onClick={() => {
-//                   onSubmit(initialData);
-//                   onClose();
-//                 }}
-//               >
-//                 Yes, Delete
-//               </button>
-//               <button onClick={onClose}>Cancel</button>
-//             </div>
-//           </>
-//         ) : (
-//           <form onSubmit={handleSubmit} className="modal-form">
-//             {renderFields()}
-//             <div className="modal-buttons">
-//               <button type="submit">{mode === "add" ? "Add" : "Save"}</button>
-//               <button type="button" onClick={onClose}>
-//                 Cancel
-//               </button>
-//             </div>
-//           </form>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-// src/Modal/Modal.jsx
-import React from "react";
+import React, { useState } from "react";
 import "./Modal.css";
 
 export default function Modal({ mode, data, type, onClose, onSubmit }) {
+  // Category options based on type
+  const categoryOptions = {
+    "Daily Expense": [
+      "Household",
+      "Food",
+      "Health Care",
+      "Credit & Loan",
+      "Personal",
+      "Transportation",
+      "Entertainment",
+      "Other",
+    ],
+    Budget: ["Income", "Saving"],
+    Bills: [
+      "Household",
+      "Food",
+      "Health Care",
+      "Credit & Loan",
+      "Personal",
+      "Transportation",
+      "Entertainment",
+      "Other",
+    ],
+  };
+
+  // Default form values
+  const defaultData = {
+    date: new Date().toISOString().split("T")[0],
+    description: "",
+    category: categoryOptions[type]?.[0] || "",
+    amount: "",
+    paid: false,
+  };
+
+  const [formData, setFormData] = useState(
+    ["edit", "delete"].includes(mode.toLowerCase()) ? data : defaultData
+  );
+
+  const isDelete = mode.toLowerCase() === "delete";
+  const isEdit = mode.toLowerCase() === "edit";
+
+  // Fields based on type
+  const fields = {
+    "Daily Expense": ["date", "description", "category", "amount"],
+    Budget: ["date", "description", "category", "amount"],
+    Bills: ["date", "description", "amount", "paid"],
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleSubmit = () => {
+    onSubmit({
+      ...formData,
+      _id: data?._id || null,
+      mode,
+      type,
+    });
+  };
+
   return (
     <div className="modal-backdrop">
       <div className="modal-content">
-        <h2>
+        <h3>
           {mode.toUpperCase()} {type}
-        </h2>
-        {/* Simple example: show data if editing/deleting */}
-        {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+        </h3>
+        <div className="modal-form">
+          {fields[type]?.map((field) => (
+            <div key={field} className="modal-form-group">
+              <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
 
-        <button onClick={() => onSubmit({ dummy: "data" })}>Submit</button>
-        <button onClick={onClose}>Close</button>
+              {field === "category" && categoryOptions[type] ? (
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  disabled={isDelete}
+                >
+                  {categoryOptions[type]?.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              ) : field === "paid" ? (
+                <input
+                  type="checkbox"
+                  name="paid"
+                  checked={formData.paid || false}
+                  onChange={handleChange}
+                  disabled={isDelete}
+                />
+              ) : field === "description" ? (
+                <textarea
+                  name="description"
+                  value={formData.description || ""}
+                  onChange={handleChange}
+                  disabled={isDelete}
+                  rows={3}
+                  className="description-input"
+                />
+              ) : (
+                <input
+                  type={
+                    field === "amount"
+                      ? "number"
+                      : field === "date"
+                      ? "date"
+                      : "text"
+                  }
+                  name={field}
+                  value={formData[field] || ""}
+                  onChange={handleChange}
+                  disabled={isDelete}
+                  {...(field === "amount" ? { min: 0 } : {})}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="modal-buttons">
+          <button className="btn btn-sm btn-outline" onClick={onClose}>
+            Close
+          </button>
+          <button className="btn btn-sm btn-outline" onClick={handleSubmit}>
+            {isDelete ? "Confirm Delete" : isEdit ? "Save" : "Submit"}
+          </button>
+        </div>
       </div>
     </div>
   );

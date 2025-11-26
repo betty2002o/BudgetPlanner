@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
       description,
       category,
       amount,
-      paid: paid ?? false, // default to false if not set
+      paid: paid ?? false,
     });
 
     const savedBill = await newBill.save();

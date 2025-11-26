@@ -1,22 +1,34 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { ExpenseContext } from "../../contexts/ExpenseContext";
 import { BillContext } from "../../contexts/BillContext";
+import Modal from "../Modal/Modal";
 import "./OverviewTable.css";
 
-export default function OverviewTable({ type }) {
-  const { expenses } = useContext(ExpenseContext);
-  const { bills } = useContext(BillContext);
+export default function OverviewTable({ type, year, month }) {
+  const { expenses, addExpense } = useContext(ExpenseContext);
+  const { bills, addBill } = useContext(BillContext);
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleAdd = () => {
+    setModalOpen(true);
+  };
 
   const typeMap = {
-    expense: {
+    "Daily Expense": {
       data: expenses,
       columns: ["Description", "Amount"],
       title: "Latest Expense",
+      allLink: "/daily-expense",
+      type: "Daily Expense",
     },
-    bills: {
+    Bills: {
       data: bills,
       columns: ["Description", "Amount", "Paid"],
       title: "Bills",
+      allLink: "/monthly-budget",
+      type: "Bills",
     },
   };
 
@@ -24,9 +36,22 @@ export default function OverviewTable({ type }) {
     data: rawData,
     columns,
     title,
-  } = typeMap[type] || { data: [], columns: [], title: "" };
+    allLink,
+  } = typeMap[type] || {
+    data: [],
+    columns: [],
+    title: "",
+    allLink: "",
+    type: "",
+  };
+  const data = rawData
+    .filter((item) => {
+      const itemDate = new Date(item.date);
+      const itemYear = itemDate.getFullYear();
+      const itemMonth = itemDate.toLocaleString("en-US", { month: "short" });
 
-  const data = [...rawData]
+      return itemYear === year && itemMonth === month;
+    })
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 5);
 
@@ -36,14 +61,25 @@ export default function OverviewTable({ type }) {
     return row[col.toLowerCase()] ?? "";
   };
 
+  function addItem(item) {
+    if (type == "Daily Expense") {
+      addExpense(item);
+    }
+    if (type == "Bills") addBill(item);
+  }
+
   return (
     <div className="overview-table">
       <div className="pre-table-title d-flex">
         <span className="flex-grow text-left">
           <div className="pre-table-summary">{title}</div>
         </span>
-        <span className="btn btn-sm btn-outline">All</span>
-        <span className="btn btn-sm btn-outline">Add</span>
+        <Link to={allLink} className="btn btn-sm btn-outline">
+          All
+        </Link>
+        <span className="btn btn-sm btn-outline" onClick={handleAdd}>
+          Add
+        </span>
       </div>
       <div className="overview-items">
         {data.map((row, idx) => (
@@ -54,6 +90,17 @@ export default function OverviewTable({ type }) {
           </div>
         ))}
       </div>
+      {modalOpen && (
+        <Modal
+          mode="add"
+          type={type}
+          onClose={() => setModalOpen(false)}
+          onSubmit={(formValues) => {
+            addItem(formValues);
+            setModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }

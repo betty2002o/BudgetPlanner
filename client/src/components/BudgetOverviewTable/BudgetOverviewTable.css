@@ -10,7 +10,6 @@
   color: #fff;
   padding: 8px;
   text-align: center;
-  /* border-radius: 8px; */
 }
 
 .budget-grid-item:nth-child(-n + 3) {

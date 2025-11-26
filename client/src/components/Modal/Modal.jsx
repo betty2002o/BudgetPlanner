@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./Modal.css";
 
 export default function Modal({ mode, data, type, onClose, onSubmit }) {
-  // Category options based on type
   const categoryOptions = {
     "Daily Expense": [
       "Household",
@@ -27,7 +26,6 @@ export default function Modal({ mode, data, type, onClose, onSubmit }) {
     ],
   };
 
-  // Default form values
   const defaultData = {
     date: new Date().toISOString().split("T")[0],
     description: "",
@@ -43,7 +41,6 @@ export default function Modal({ mode, data, type, onClose, onSubmit }) {
   const isDelete = mode.toLowerCase() === "delete";
   const isEdit = mode.toLowerCase() === "edit";
 
-  // Fields based on type
   const fields = {
     "Daily Expense": ["date", "description", "category", "amount"],
     Budget: ["date", "description", "category", "amount"],

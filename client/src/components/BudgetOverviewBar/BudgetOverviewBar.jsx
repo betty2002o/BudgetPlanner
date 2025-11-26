@@ -13,6 +13,23 @@ export default function BudgetOverviewBar() {
   const { expenses } = useContext(ExpenseContext);
   const { bills } = useContext(BillContext);
 
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
+
+  // Generic filter by current month & year
+  const filterByDate = (items) =>
+    items.filter((item) => {
+      const date = new Date(item.date);
+      const matchYear = date.getFullYear() === currentYear;
+      const matchMonth =
+        date.toLocaleString("en-US", { month: "short" }) === currentMonth;
+      return matchYear && matchMonth;
+    });
+
+  const filteredBudgets = filterByDate(budgets);
+  const filteredExpenses = filterByDate(expenses);
+  const filteredBills = filterByDate(bills);
+
   const sumByCategory = (items, category) =>
     items
       .filter((x) =>
@@ -20,24 +37,24 @@ export default function BudgetOverviewBar() {
       )
       .reduce((sum, item) => sum + item.amount, 0);
 
-  // Totals
-  const totalIncome = sumByCategory(budgets, "income");
-  const totalSaving = sumByCategory(budgets, "saving");
-  const totalExpense = sumByCategory(expenses);
-  const totalPaidBill = sumByCategory(bills.filter((x) => x.paid));
+  const totalIncome = sumByCategory(filteredBudgets, "income");
+  const totalSaving = sumByCategory(filteredBudgets, "saving");
+  const totalExpense = sumByCategory(filteredExpenses);
+  const totalPaidBill = sumByCategory(filteredBills.filter((x) => x.paid));
 
   const totalBudget = totalIncome - totalSaving;
   const totalSpent = totalExpense + totalPaidBill;
+  const spentPercentage = totalBudget ? totalSpent / totalBudget : 0;
 
-  const spentPercentage = totalBudget
-    ? (totalSpent / totalBudget).toFixed(2)
-    : 0;
+  const remainingPercentage = Math.max(0, Math.min(1, 1 - spentPercentage));
+  const completed = Math.round(remainingPercentage * 100);
+
   return (
     <div className="d-flex budget-container">
       <div>Remaining Budget: ${totalBudget - totalSpent}</div>
       <div className="budget-bar">
         <ProgressBar
-          completed={(1 - spentPercentage) * 100}
+          completed={completed}
           height="30px"
           bgColor={bgColor}
           baseBgColor={baseBgColor}

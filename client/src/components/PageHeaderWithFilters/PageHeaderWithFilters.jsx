@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./PageHeaderWithFilters.css";
 
 export default function PageHeaderWithFilters({ type, onFilterChange }) {
   const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
+
   const startYear = currentYear - 5;
   const years = [];
-  for (let y = currentYear; y >= startYear; y--) {
-    years.push(y);
-  }
+  for (let y = currentYear; y >= startYear; y--) years.push(y);
 
   const months = [
     "Jan",
@@ -40,26 +40,30 @@ export default function PageHeaderWithFilters({ type, onFilterChange }) {
   if (type === "Budget") categories = budgetCategory;
   else if (type === "Daily Expense") categories = expenseCategory;
 
-  // State to store selected filters
   const [filters, setFilters] = useState({
-    year: "",
-    month: "",
+    year: currentYear,
+    month: currentMonth,
     category: "",
     paid: "",
     amount: "",
   });
 
+  useEffect(() => {
+    if (onFilterChange) onFilterChange(filters);
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedFilters = { ...filters, [name]: value };
     setFilters(updatedFilters);
-    if (onFilterChange) onFilterChange(updatedFilters); // pass to parent
+    if (onFilterChange) onFilterChange(updatedFilters);
   };
 
   return (
     <div className="header-wrapper">
       <div className="container d-flex">
         <h1 className="header-title flex-grow">{type}</h1>
+
         <div className="header-filters d-flex">
           <select name="year" value={filters.year} onChange={handleChange}>
             <option value="">Filter by Year</option>
@@ -72,8 +76,8 @@ export default function PageHeaderWithFilters({ type, onFilterChange }) {
 
           <select name="month" value={filters.month} onChange={handleChange}>
             <option value="">Filter by Month</option>
-            {months.map((month, index) => (
-              <option key={index} value={month}>
+            {months.map((month) => (
+              <option key={month} value={month}>
                 {month}
               </option>
             ))}
@@ -86,8 +90,8 @@ export default function PageHeaderWithFilters({ type, onFilterChange }) {
               onChange={handleChange}
             >
               <option value="">Filter by Category</option>
-              {categories.map((cat, index) => (
-                <option key={index} value={cat}>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
                   {cat}
                 </option>
               ))}
@@ -101,18 +105,6 @@ export default function PageHeaderWithFilters({ type, onFilterChange }) {
               <option value="no">No</option>
             </select>
           )}
-
-          {/* {type !== "Bills" && type !== "Monthly Summary" && (
-            <select
-              name="amount"
-              value={filters.amount}
-              onChange={handleChange}
-            >
-              <option value="">Filter by Amount</option>
-              <option value="below50">Below 50</option>
-              <option value="above50">50 and above</option>
-            </select>
-          )} */}
         </div>
       </div>
     </div>

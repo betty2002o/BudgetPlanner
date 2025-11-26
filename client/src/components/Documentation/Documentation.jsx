@@ -52,6 +52,18 @@ export default function Documentation() {
               </li>
             </ul>
           </section>
+          <section>
+            Optional: Seed Database
+            <ul>
+              <li>
+                Navigate to <code>/server</code> folder
+              </li>
+              <li>
+                Run: <code>npm run seed</code>
+              </li>
+              <li>This populates MongoDB with sample data for testing.</li>
+            </ul>
+          </section>
         </div>
 
         <div className="documentation-body-heading">

@@ -48,6 +48,11 @@ npm install
 From the server folder, run frontend and backend concurrently:
 npm run dev:all
 
+## Optional: Seed Database
+
+Navigate to server folder
+Run: npm run seed
+
 ## Features
 
 Dashboard

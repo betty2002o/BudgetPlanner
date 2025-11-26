@@ -17,7 +17,7 @@
 
 .expense-products th:nth-child(2),
 .expense-products td:nth-child(2) {
-  text-align: center;
+  text-align: right;
 }
 .expense-products th:last-child,
 .expense-products td:last-child {

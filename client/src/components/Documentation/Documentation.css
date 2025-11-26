@@ -1,0 +1,25 @@
+.documentation-body-heading {
+  background-color: var(--muted-bg-color);
+  display: flex;
+  justify-content: flex-start;
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 6px 6px 0 0;
+}
+.documentation-body-subheading {
+  /* display: flex;
+  justify-content: flex-start; */
+  text-align: left;
+  padding: 15px 30px;
+}
+.documentation-indent {
+  padding-left: 32px;
+  margin-top: 10px;
+}
+.documentation-body-subheading section {
+  margin: 20px 0;
+}
+
+.documentation-body-subheading ul {
+  margin: 10px 0;
+}

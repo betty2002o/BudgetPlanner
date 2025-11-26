@@ -38,6 +38,8 @@ export default function Modal({ mode, data, type, onClose, onSubmit }) {
     ["edit", "delete"].includes(mode.toLowerCase()) ? data : defaultData
   );
 
+  const [errors, setErrors] = useState({});
+
   const isDelete = mode.toLowerCase() === "delete";
   const isEdit = mode.toLowerCase() === "edit";
 
@@ -47,15 +49,38 @@ export default function Modal({ mode, data, type, onClose, onSubmit }) {
     Bills: ["date", "description", "amount", "paid"],
   };
 
+  const validate = () => {
+    let newErrors = {};
+
+    if (!formData.date) newErrors.date = "Date is required.";
+    if (!formData.description?.trim())
+      newErrors.description = "Description is required.";
+    if ("amount" in formData && (formData.amount === "" || formData.amount < 0))
+      newErrors.amount = "Amount must be 0 or greater.";
+    if (!formData.category && type !== "Bills")
+      newErrors.category = "Category is required.";
+
+    return newErrors;
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
+    setErrors({ ...errors, [name]: "" });
   };
 
   const handleSubmit = () => {
+    if (!isDelete) {
+      const validationErrors = validate();
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
+    }
+
     onSubmit({
       ...formData,
       _id: data?._id || null,
@@ -74,13 +99,13 @@ export default function Modal({ mode, data, type, onClose, onSubmit }) {
           {fields[type]?.map((field) => (
             <div key={field} className="modal-form-group">
               <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
-
               {field === "category" && categoryOptions[type] ? (
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
                   disabled={isDelete}
+                  className={errors.category ? "input-error" : ""}
                 >
                   {categoryOptions[type]?.map((cat) => (
                     <option key={cat} value={cat}>
@@ -103,7 +128,9 @@ export default function Modal({ mode, data, type, onClose, onSubmit }) {
                   onChange={handleChange}
                   disabled={isDelete}
                   rows={3}
-                  className="description-input"
+                  className={`description-input ${
+                    errors.description ? "input-error" : ""
+                  }`}
                 />
               ) : (
                 <input
@@ -119,6 +146,7 @@ export default function Modal({ mode, data, type, onClose, onSubmit }) {
                   onChange={handleChange}
                   disabled={isDelete}
                   {...(field === "amount" ? { min: 0 } : {})}
+                  className={errors[field] ? "input-error" : ""}
                 />
               )}
             </div>

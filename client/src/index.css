@@ -109,6 +109,13 @@ table {
   border-spacing: 0;
 }
 
+.footer {
+  height: var(--navbar-height);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #000;
+}
 @media (min-width: 768px) {
   .d-flex {
     flex-direction: row;

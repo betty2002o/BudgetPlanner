@@ -63,7 +63,6 @@ export default function PageHeaderWithFilters({ type, onFilterChange }) {
     <div className="header-wrapper">
       <div className="container d-flex">
         <h1 className="header-title flex-grow">{type}</h1>
-
         <div className="header-filters d-flex">
           <select name="year" value={filters.year} onChange={handleChange}>
             <option value="">Filter by Year</option>

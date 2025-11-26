@@ -43,3 +43,12 @@ input[type="number"] {
   height: 20px;
   max-width: 110px;
 }
+.input-error {
+  border: 1px solid red;
+}
+input.input-error[type="number"] {
+  border: 1px solid red;
+}
+input.input-error[type="date"] {
+  border: 1px solid red;
+}

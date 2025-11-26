@@ -40,7 +40,7 @@ export default function ExpenseTable({ year, month }) {
   const totalSpent = totalExpense + totalPaidBill;
 
   const getPercentage = (amount) =>
-    totalSpent ? ((amount / totalSpent) * 100).toFixed(2) : 0;
+    totalSpent ? ((amount / totalSpent) * 100).toFixed(1) : 0;
 
   return (
     <div className="expense-table-graph">

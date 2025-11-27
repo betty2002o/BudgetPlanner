@@ -4,8 +4,25 @@ import BudgetOverview from "../BudgetOverview/BudgetOverview";
 import ExpenseOverview from "../ExpenseOverview/ExpenseOverview";
 
 export default function Dashboard() {
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
+  const now = new Date();
+  const currentYear = now.getFullYear();
+
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const currentMonth = monthNames[now.getMonth()];
+
   return (
     <div>
       <RecentOverview />

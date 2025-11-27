@@ -173,7 +173,8 @@ export default function Documentation() {
             <li>Implement authentication (user login).</li>
             <li>Enable export to PDF or Excel.</li>
             <li>Carry forward remaining monthly balance.</li>
-            <li>Add dark mode support.</li>
+            <li>Add theme support.</li>
+            <li>Add timezone</li>
           </ul>
         </div>
       </div>

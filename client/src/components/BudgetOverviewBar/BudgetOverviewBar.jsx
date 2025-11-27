@@ -13,17 +13,32 @@ export default function BudgetOverviewBar() {
   const { expenses } = useContext(ExpenseContext);
   const { bills } = useContext(BillContext);
 
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
+  // Get current year & month safely
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const currentMonth = monthNames[now.getMonth()];
 
-  // Generic filter by current month & year
   const filterByDate = (items) =>
     items.filter((item) => {
-      const date = new Date(item.date);
-      const matchYear = date.getFullYear() === currentYear;
-      const matchMonth =
-        date.toLocaleString("en-US", { month: "short" }) === currentMonth;
-      return matchYear && matchMonth;
+      if (!item.date) return false;
+      const [yearStr, monthStr] = item.date.split("-");
+      const itemYear = Number(yearStr);
+      const itemMonth = monthNames[Number(monthStr) - 1];
+      return itemYear === currentYear && itemMonth === currentMonth;
     });
 
   const filteredBudgets = filterByDate(budgets);

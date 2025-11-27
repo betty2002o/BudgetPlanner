@@ -22,20 +22,21 @@ export default function ExpenseTable({ year, month }) {
   const [filteredBills, setFilteredBills] = useState([]);
 
   useEffect(() => {
-    const monthStr = month ? month.toString().slice(0, 3) : "";
-    if (!monthStr) return;
+    if (!month || !year) return;
+
+    const monthIndex = new Date(`${month} 1, 2000`).getMonth() + 1;
+    const monthStr = monthIndex.toString().padStart(2, "0"); // "11"
 
     const filterByDate = (items) =>
       items.filter((item) => {
-        const date = new Date(item.date);
-        const itemMonthStr = date.toLocaleString("en-US", { month: "short" });
-
-        return date.getFullYear() === Number(year) && itemMonthStr === monthStr;
+        if (!item.date) return false;
+        const [itemYear, itemMonth] = item.date.split("-");
+        return itemYear === year.toString() && itemMonth === monthStr;
       });
 
     setFilteredExpenses(filterByDate(expenses));
     setFilteredBills(filterByDate(bills));
-  }, [Number(year), month, expenses, bills]);
+  }, [year, month, expenses, bills]);
 
   const totalExpense = filteredExpenses.reduce(
     (sum, item) => sum + item.amount,

@@ -5,23 +5,40 @@ import "./BudgetOverviewTable.css";
 export default function BudgetOverviewTable() {
   const { budgets } = useContext(BudgetContext);
 
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const currentMonth = monthNames[now.getMonth()];
 
   const filteredBudgets = budgets.filter((item) => {
-    const date = new Date(item.date);
-    const matchYear = date.getFullYear() === currentYear;
-    const matchMonth =
-      date.toLocaleString("en-US", { month: "short" }) === currentMonth;
-    return matchYear && matchMonth;
+    if (!item.date) return false;
+
+    const [yearStr, monthStr] = item.date.split("-");
+    const itemYear = Number(yearStr);
+    const itemMonth = monthNames[Number(monthStr) - 1];
+
+    return itemYear === currentYear && itemMonth === currentMonth;
   });
 
   const totalIncome = filteredBudgets
-    .filter((x) => x.category.toLowerCase() === "income")
+    .filter((x) => x.category?.toLowerCase() === "income")
     .reduce((sum, item) => sum + item.amount, 0);
 
   const totalSaving = filteredBudgets
-    .filter((x) => x.category.toLowerCase() === "saving")
+    .filter((x) => x.category?.toLowerCase() === "saving")
     .reduce((sum, item) => sum + item.amount, 0);
 
   const totalBudget = totalIncome - totalSaving;

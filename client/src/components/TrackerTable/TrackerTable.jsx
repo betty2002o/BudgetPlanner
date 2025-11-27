@@ -27,10 +27,14 @@ export default function TrackerTable({ columns, type, filters }) {
   const allData = getDataByType(type);
   const data = allData
     .filter((item) => {
-      if (!filters) return true;
+      const [yearStr, monthStr] = item.date.split("-");
+      const itemYear = Number(yearStr);
+      const itemMonth = Number(monthStr) - 1; // 0 = Jan
 
-      if (filters.year && !item.date.startsWith(filters.year)) return false;
+      // Filter by year
+      if (filters.year && itemYear !== Number(filters.year)) return false;
 
+      // Filter by month
       if (filters.month) {
         const monthNames = [
           "Jan",
@@ -46,15 +50,8 @@ export default function TrackerTable({ columns, type, filters }) {
           "Nov",
           "Dec",
         ];
-        const monthIndex = new Date(item.date).getMonth();
-        if (monthNames[monthIndex] !== filters.month) return false;
-      }
-
-      if (filters.category && item.category !== filters.category) return false;
-
-      if (filters.paid) {
-        const isPaid = filters.paid.toLowerCase() === "yes";
-        if (item.paid !== isPaid) return false;
+        const filterMonthNumber = monthNames.indexOf(filters.month);
+        if (itemMonth !== filterMonthNumber) return false;
       }
 
       return true;

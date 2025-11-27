@@ -44,15 +44,30 @@ export default function OverviewTable({ type, year, month }) {
     allLink: "",
     type: "",
   };
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
   const data = rawData
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
     .filter((item) => {
-      const itemDate = new Date(item.date);
-      return (
-        itemDate.getFullYear() === year &&
-        itemDate.toLocaleString("en-US", { month: "short" }) === month
-      );
+      const [yearStr, monthStr] = item.date.split("-");
+      const itemYear = Number(yearStr);
+      const itemMonth = monthNames[Number(monthStr) - 1];
+
+      return itemYear === year && itemMonth === month;
     })
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 5);
 
   const renderCell = (col, row) => {

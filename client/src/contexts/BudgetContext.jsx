@@ -6,30 +6,24 @@ export const BudgetContext = createContext();
 
 export function BudgetProvider({ children }) {
   const [budgets, setBudgets] = useState([]);
-
+  const API_URL = import.meta.env.VITE_API_URL || "";
   // Fetch data once when app loads
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/budgets")
+      .get(`${API_URL}/api/budgets`)
       .then((res) => setBudgets(res.data))
       .catch((err) => console.error(err));
   }, []);
 
   // Add expense
   const addBudget = async (newBudget) => {
-    const res = await axios.post(
-      "http://localhost:5000/api/budgets",
-      newBudget
-    );
+    const res = await axios.post(`${API_URL}/api/budgets`, newBudget);
     setBudgets((prev) => [...prev, res.data]);
   };
 
   // Update expense
   const updateBudget = async (id, updatedData) => {
-    const res = await axios.put(
-      `http://localhost:5000/api/budgets/${id}`,
-      updatedData
-    );
+    const res = await axios.put(`${API_URL}/api/budgets/${id}`, updatedData);
     setBudgets((prev) =>
       prev.map((item) => (item._id === id ? res.data : item))
     );
@@ -37,7 +31,7 @@ export function BudgetProvider({ children }) {
 
   // Delete expense
   const deleteBudget = async (id) => {
-    await axios.delete(`http://localhost:5000/api/budgets/${id}`);
+    await axios.delete(`${API_URL}/api/budgets/${id}`);
     setBudgets((prev) => prev.filter((item) => item._id !== id));
   };
 

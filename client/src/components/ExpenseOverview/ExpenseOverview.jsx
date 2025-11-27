@@ -10,9 +10,9 @@ export default function ExpenseOverview({ year, month }) {
         <div className="pre-table-summary">Expense & Bill</div>
       </div>
       <div className="d-flex">
-        <ExpenseTable year={year} month={month} />
+        <ExpenseTable key={`${year}-${month}`} year={year} month={month} />
         <div className="expense-table-graph">
-          <ExpenseGraph year={year} month={month} />
+          <ExpenseGraph key={`${year}-${month}`} year={year} month={month} />
         </div>
       </div>
     </div>

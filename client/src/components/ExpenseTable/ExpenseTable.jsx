@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { ExpenseContext } from "../../contexts/ExpenseContext";
 import { BillContext } from "../../contexts/BillContext";
 import "./ExpenseTable.css";
@@ -6,6 +6,7 @@ import "./ExpenseTable.css";
 export default function ExpenseTable({ year, month }) {
   const { bills } = useContext(BillContext);
   const { expenses } = useContext(ExpenseContext);
+
   const labels = [
     "Household",
     "Food",
@@ -17,26 +18,42 @@ export default function ExpenseTable({ year, month }) {
     "Other",
   ];
 
-  const filterByDate = (items) =>
-    items.filter((item) => {
-      const date = new Date(item.date);
-      return (
-        date.getFullYear() === year &&
-        date.toLocaleString("en-US", { month: "short" }) === month
-      );
-    });
+  const [filteredExpenses, setFilteredExpenses] = useState([]);
+  const [filteredBills, setFilteredBills] = useState([]);
 
-  const filteredExpenses = filterByDate(expenses);
-  const filteredBills = filterByDate(bills);
+  useEffect(() => {
+    const monthStr = month ? month.toString().slice(0, 3) : "";
+    if (!monthStr) return;
+
+    const filterByDate = (items) =>
+      items.filter((item) => {
+        const date = new Date(item.date);
+        const itemMonthStr = date.toLocaleString("en-US", { month: "short" });
+        console.log(
+          "Filtering item:",
+          item.date,
+          "Year:",
+          date.getFullYear(),
+          "Month:",
+          itemMonthStr,
+          "Selected Year/Month:",
+          year,
+          monthStr
+        );
+        return date.getFullYear() === Number(year) && itemMonthStr === monthStr;
+      });
+
+    setFilteredExpenses(filterByDate(expenses));
+    setFilteredBills(filterByDate(bills));
+  }, [Number(year), month, expenses, bills]);
 
   const totalExpense = filteredExpenses.reduce(
     (sum, item) => sum + item.amount,
     0
   );
   const totalPaidBill = filteredBills
-    .filter((bill) => bill.paid)
-    .reduce((sum, bill) => sum + bill.amount, 0);
-
+    .filter((b) => b.paid)
+    .reduce((sum, b) => sum + b.amount, 0);
   const totalSpent = totalExpense + totalPaidBill;
 
   const getPercentage = (amount) =>
@@ -53,24 +70,34 @@ export default function ExpenseTable({ year, month }) {
           </tr>
         </thead>
         <tbody>
-          {labels.map((x, idx) => {
-            const categoryTotal = filteredExpenses
-              .filter((z) => z.category.toLowerCase() === x.toLowerCase())
-              .reduce((sum, y) => sum + y.amount, 0);
+          {filteredExpenses.length === 0 && filteredBills.length === 0 ? (
+            <tr>
+              <td colSpan={3} style={{ textAlign: "center" }}>
+                No data for {month} {year}
+              </td>
+            </tr>
+          ) : (
+            labels.map((label, idx) => {
+              const categoryTotal = filteredExpenses
+                .filter((e) => e.category.toLowerCase() === label.toLowerCase())
+                .reduce((sum, e) => sum + e.amount, 0);
 
-            return (
-              <tr key={idx}>
-                <td>{x}</td>
-                <td>${categoryTotal.toFixed(2)}</td>
-                <td>{getPercentage(categoryTotal)}%</td>
-              </tr>
-            );
-          })}
-          <tr>
-            <td>Paid Bills</td>
-            <td>${totalPaidBill.toFixed(2)}</td>
-            <td>{getPercentage(totalPaidBill)}%</td>
-          </tr>
+              return (
+                <tr key={idx}>
+                  <td>{label}</td>
+                  <td>${categoryTotal.toFixed(2)}</td>
+                  <td>{getPercentage(categoryTotal)}%</td>
+                </tr>
+              );
+            })
+          )}
+          {filteredBills.length > 0 && (
+            <tr>
+              <td>Paid Bills</td>
+              <td>${totalPaidBill.toFixed(2)}</td>
+              <td>{getPercentage(totalPaidBill)}%</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

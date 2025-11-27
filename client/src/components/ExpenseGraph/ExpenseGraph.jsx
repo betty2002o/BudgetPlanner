@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -12,17 +12,22 @@ export default function ExpenseGraph({ year, month }) {
   const { expenses } = useContext(ExpenseContext);
   const { bills } = useContext(BillContext);
 
-  const filterByDate = (items) =>
-    items.filter((item) => {
-      const date = new Date(item.date);
-      return (
-        date.getFullYear() === year &&
-        date.toLocaleString("en-US", { month: "short" }) === month
-      );
-    });
+  const [filteredExpenses, setFilteredExpenses] = useState([]);
+  const [filteredBills, setFilteredBills] = useState([]);
 
-  const filteredExpenses = filterByDate(expenses);
-  const filteredBills = filterByDate(bills);
+  useEffect(() => {
+    if (!month) return;
+
+    const filterByDate = (items) =>
+      items.filter((item) => {
+        const date = new Date(item.date);
+        const itemMonthStr = date.toLocaleString("en-US", { month: "short" });
+        return date.getFullYear() === Number(year) && itemMonthStr === month;
+      });
+
+    setFilteredExpenses(filterByDate(expenses));
+    setFilteredBills(filterByDate(bills));
+  }, [year, month, expenses, bills]);
 
   const labels = [
     "Household",
@@ -58,6 +63,7 @@ export default function ExpenseGraph({ year, month }) {
     "rgba(199, 199, 199, 0.8)",
     "rgba(255, 159, 255, 0.8)",
     "rgba(100, 100, 255, 0.8)",
+    "rgba(0,0,0,0.8)",
   ];
 
   const data = {

@@ -45,14 +45,14 @@ export default function OverviewTable({ type, year, month }) {
     type: "",
   };
   const data = rawData
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
     .filter((item) => {
       const itemDate = new Date(item.date);
-      const itemYear = itemDate.getFullYear();
-      const itemMonth = itemDate.toLocaleString("en-US", { month: "short" });
-
-      return itemYear === year && itemMonth === month;
+      return (
+        itemDate.getFullYear() === year &&
+        itemDate.toLocaleString("en-US", { month: "short" }) === month
+      );
     })
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 5);
 
   const renderCell = (col, row) => {

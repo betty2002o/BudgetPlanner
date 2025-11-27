@@ -29,17 +29,7 @@ export default function ExpenseTable({ year, month }) {
       items.filter((item) => {
         const date = new Date(item.date);
         const itemMonthStr = date.toLocaleString("en-US", { month: "short" });
-        console.log(
-          "Filtering item:",
-          item.date,
-          "Year:",
-          date.getFullYear(),
-          "Month:",
-          itemMonthStr,
-          "Selected Year/Month:",
-          year,
-          monthStr
-        );
+
         return date.getFullYear() === Number(year) && itemMonthStr === monthStr;
       });
 

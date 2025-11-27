@@ -45,8 +45,8 @@ npm install
 
 ## Running the Application
 
-From the server folder, run frontend and backend concurrently:
-npm run dev:all
+From the root folder, run both frontend and backend concurrently:
+npm run dev
 
 ## Optional: Seed Database
 

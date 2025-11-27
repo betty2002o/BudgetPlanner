@@ -1,0 +1,34 @@
+{
+  "name": "final-project",
+  "version": "1.0.0",
+  "description": "A web application to manage your personal finances including daily expenses, monthly budgets, and bills. Provides visual insights with summaries, graphs, and category breakdowns.",
+  "main": "index.js",
+"scripts": {
+  "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+  "dev:server": "nodemon server/server.js",
+  "dev:client": "npm run dev --prefix client",
+  "start": "node server/server.js",
+  "build:client": "npm install --prefix client && npm run build --prefix client",
+  "seed": "node server/seed.js"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/betty2002o/BudgetPlanner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/betty2002o/BudgetPlanner/issues"
+  },
+  "homepage": "https://github.com/betty2002o/BudgetPlanner#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^9.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

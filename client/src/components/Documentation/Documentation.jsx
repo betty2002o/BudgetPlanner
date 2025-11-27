@@ -46,9 +46,9 @@ export default function Documentation() {
           <section>
             Run Frontend & Backend Concurrently
             <ul>
-              <li>Navigate to server folder</li>
+              <li>Navigate to root folder</li>
               <li>
-                Run: <code>npm run dev:all</code>
+                Run: <code>npm run dev</code>
               </li>
             </ul>
           </section>

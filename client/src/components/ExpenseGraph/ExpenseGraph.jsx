@@ -20,15 +20,33 @@ export default function ExpenseGraph({ year, month }) {
 
     const filterByDate = (items) =>
       items.filter((item) => {
-        const date = new Date(item.date);
-        const itemMonthStr = date.toLocaleString("en-US", { month: "short" });
-        return date.getFullYear() === Number(year) && itemMonthStr === month;
+        const [yearStr, monthStr] = item.date.split("-");
+        const itemYear = Number(yearStr);
+        const itemMonth = Number(monthStr) - 1; // 0 = Jan
+
+        // month is like "Nov"
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const filterMonthNumber = monthNames.indexOf(month);
+
+        return itemYear === Number(year) && itemMonth === filterMonthNumber;
       });
 
     setFilteredExpenses(filterByDate(expenses));
     setFilteredBills(filterByDate(bills));
   }, [year, month, expenses, bills]);
-
   const labels = [
     "Household",
     "Food",
@@ -63,7 +81,6 @@ export default function ExpenseGraph({ year, month }) {
     "rgba(199, 199, 199, 0.8)",
     "rgba(255, 159, 255, 0.8)",
     "rgba(100, 100, 255, 0.8)",
-    "rgba(0,0,0,0.8)",
   ];
 
   const data = {

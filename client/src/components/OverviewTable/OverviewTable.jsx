@@ -27,7 +27,7 @@ export default function OverviewTable({ type, year, month }) {
       data: bills,
       columns: ["Description", "Amount", "Paid"],
       title: "Bills",
-      allLink: "/monthly-budget",
+      allLink: "/bills",
       type: "Bills",
     },
   };

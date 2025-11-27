@@ -25,15 +25,21 @@ export default function Modal({ mode, data, type, onClose, onSubmit }) {
       "Other",
     ],
   };
+  const todayLocal = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   const defaultData = {
-    date: new Date().toISOString().split("T")[0],
+    date: todayLocal(),
     description: "",
     category: categoryOptions[type]?.[0] || "",
     amount: "",
     paid: false,
   };
-
   const [formData, setFormData] = useState(
     ["edit", "delete"].includes(mode.toLowerCase()) ? data : defaultData
   );

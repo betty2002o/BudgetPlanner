@@ -29,7 +29,7 @@ export default function TrackerTable({ columns, type, filters }) {
     .filter((item) => {
       const [yearStr, monthStr] = item.date.split("-");
       const itemYear = Number(yearStr);
-      const itemMonth = Number(monthStr) - 1; // 0 = Jan
+      const itemMonth = Number(monthStr) - 1;
 
       // Filter by year
       if (filters.year && itemYear !== Number(filters.year)) return false;
@@ -54,9 +54,21 @@ export default function TrackerTable({ columns, type, filters }) {
         if (itemMonth !== filterMonthNumber) return false;
       }
 
+      // Filter by category
+      if (filters.category && item.category) {
+        if (item.category.toLowerCase() !== filters.category.toLowerCase())
+          return false;
+      }
+
+      // Filter by paid only for Bills
+      if (type === "Bills" && filters.paid) {
+        const paidFilter = filters.paid.toLowerCase() === "yes";
+        if (item.paid !== paidFilter) return false;
+      }
+
       return true;
     })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+    .sort((a, b) => (a.date > b.date ? -1 : 1));
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [modalData, setModalData] = useState(null);

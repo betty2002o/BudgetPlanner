@@ -25,40 +25,41 @@ export default function TrackerTable({ columns, type, filters }) {
     }
   };
   const allData = getDataByType(type);
-  const data = allData.filter((item) => {
-    if (!filters) return true;
+  const data = allData
+    .filter((item) => {
+      if (!filters) return true;
 
-    if (filters.year && !item.date.startsWith(filters.year)) return false;
+      if (filters.year && !item.date.startsWith(filters.year)) return false;
 
-    if (filters.month) {
-      const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      const monthIndex = new Date(item.date).getMonth();
-      if (monthNames[monthIndex] !== filters.month) return false;
-    }
+      if (filters.month) {
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const monthIndex = new Date(item.date).getMonth();
+        if (monthNames[monthIndex] !== filters.month) return false;
+      }
 
-    if (filters.category && item.category !== filters.category) return false;
+      if (filters.category && item.category !== filters.category) return false;
 
-    if (filters.paid) {
-      const isPaid = filters.paid.toLowerCase() === "yes";
-      if (item.paid !== isPaid) return false;
-    }
+      if (filters.paid) {
+        const isPaid = filters.paid.toLowerCase() === "yes";
+        if (item.paid !== isPaid) return false;
+      }
 
-    return true;
-  });
-
+      return true;
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [modalData, setModalData] = useState(null);
